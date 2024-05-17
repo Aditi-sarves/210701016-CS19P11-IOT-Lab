@@ -1,0 +1,89 @@
+
+
+#include "HomeSpan.h"
+
+#include "DEV_LED.h"
+
+#include "DEV_SWITCH.h"
+
+void setup() {
+
+Serial.begin(115200);
+
+homeSpan.begin(Category::Bridges, "Bedroom Controller");
+
+new SpanAccessory();
+
+new Service:: Accessory Information();
+
+new Characteristic:: Identify();
+
+new SpanAccessory();
+
+new Service:: Accessory Information();
+
+new Characteristic:: Identify();
+
+new Characteristic::Name("Switch");
+
+new DEV SWITCH(26);
+
+new SpanAccessory();
+
+
+new Service:: Accessory Information();
+
+new Characteristic:: Identify();
+
+new Characteristic::Name("Board LED");
+
+new DEV LED(2);
+
+homeSpan.autoPoll(); }
+
+void loop(){
+
+}
+
+
+STRUCT DEV_LED : Service::LightBulb{
+ int ledpin;
+SpanCharecteristic* power;
+
+DEV_LED(int ledpin) : Service::LightBulb()
+{
+   power = new Characteristic::On();
+   this->ledpin = ledpin;
+   pinMode(ledPin,OUTPUT);
+
+}
+
+Boolean update(){
+  digitalWriter(ledpin,power->getNewVal());
+  return(true);
+ }
+}
+
+
+STRUCT DEV_SWITCH : Service::Switch{
+ int ledpin;
+SpanCharecteristic* power;
+
+DEV_LED(int ledpin) : Service::Switch()
+{
+   power = new Characteristic::On();
+   this->ledpin = ledpin;
+   pinMode(ledPin,OUTPUT);
+   digitalWrite(ledPin, HIGH);
+
+}
+
+Boolean update(){
+  digitalWriter(ledpin, (int)!power->getNewVal<bool>());
+  return(true);
+ }
+}
+
+
+
+
